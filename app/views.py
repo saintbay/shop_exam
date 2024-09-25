@@ -7,7 +7,10 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.decorators import login_required
 import pprint
-
+from django.shortcuts import redirect, get_object_or_404
+from django.contrib import messages
+from .models import Product  # Импортируйте вашу модель товара
+from .cart import Cart  # Импортируйте свою модель/класс корзины
 # def home(request):
 #     return render(request, 'home.html')
 
@@ -43,7 +46,17 @@ def signup_view(request):
         form = SignUpForm()
     return render(request, 'signup.html', {'form': form})
 
+def add_to_cart(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
 
+    if request.method == 'POST':
+        quantity = int(request.POST.get('quantity', 1))
+        cart = Cart(request)
+        cart.add(product, quantity)
+
+        messages.success(request, f'{product.name} добавлен в корзину.')
+        return redirect('cart')  
+    return redirect('product_detail', product_id=product.id)  # Вернуться на страницу товара
 def login_view(request):
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
@@ -65,9 +78,9 @@ def logout_view(request):
 def home(request):
     username = request.user.username if request.user.is_authenticated else None
     return render(request, 'home.html', {'username': username})
-def home_view(request):
+def catalog_view(request):
     products = Product.objects.all()  # Получаем все продукты
-    return render(request, 'home.html', {'products': products})
+    return render(request, 'catalog.html', {'products': products})
 
 # Страница продукта
 def product_detail_view(request, product_id):

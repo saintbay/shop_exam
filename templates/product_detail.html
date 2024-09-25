@@ -10,7 +10,11 @@
             <h2>{{ product.name }}</h2>
             <p>{{ product.description }}</p>
             <h4>{{ product.price }} ₸</h4>
-            <a href="#" class="btn btn-success">Добавить в корзину</a>
+            <form action="{% url 'add_to_cart' product.id %}" method="post">
+                {% csrf_token %}
+                <input type="number" name="quantity" value="1" min="1" class="form-control mb-2" style="width: 100px;">
+                <button type="submit" class="btn btn-success">Добавить в корзину</button>
+            </form>
         </div>
     </div>
 </div>

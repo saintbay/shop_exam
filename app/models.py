@@ -1,3 +1,4 @@
+from pydoc import describe
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -26,9 +27,10 @@ class ProductCategory(models.Model):
 
 class Product(BaseModel):
     name = models.CharField(max_length=100, verbose_name="Название")
+    description = models.TextField(verbose_name='Описание')
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Цена")
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
-    img = models.ImageField(null=True, blank=True, upload_to='static/img/avatars/')
+    img = models.ImageField(null=True, blank=True, upload_to='static/img/')
     # shop = models.ForeignKey(Shop, on_delete=models.CASCADE, related_name="products", verbose_name="Магазин")
     
     class Meta:
