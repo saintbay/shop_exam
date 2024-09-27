@@ -11,6 +11,57 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+LOGGING = {
+
+'version' :1 , 
+    'disable_existing_loggers':True,
+    'filters':{
+        'require_debug_false': {
+            '()' : 'django.utils.log.RequireDebugFalse',
+
+        },
+        'require_debug_true': {
+            '()' : 'django.utils.log.RequireDebugTrue',
+
+        },
+    },
+    'formatters':{
+        'simple':{
+            'format': '[%(asctime)s] %(levelname)s: %(message)s',
+            'datefmt': '%Y.%m.%d %H:%M:%S',
+        }
+    },
+    'handlers':{
+        'console_dev':{
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+            'filters': ["require_debug_true"]
+        },
+        'console_prod':{
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+            'level': 'ERROR',
+            'filters': ["require_debug_false"]
+        },
+        'file':{
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename':BASE_DIR / 'debug.log',
+            'maxBytes':1048576,
+            'backupCount':10,
+            'formatter':'simple',
+        }
+    },
+    'loggers':{
+        'django':{
+            'hendlers':['console_dev', 'console_prod'],
+        },
+        'django.server':{
+            'handlers':['file'],
+            'level': 'INFO',
+            'propagate':True,
+        }
+    }
+}
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -19,7 +70,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app',
+    'app'
 ]
 
 MIDDLEWARE = [
@@ -82,12 +133,14 @@ TIME_ZONE = 'Asia/Qyzylorda'
 USE_I18N = True
 
 USE_TZ = True
-
-
-
-STATIC_URL = 'static/'
+BASE_DIR = Path(__file__).resolve().parent.parent
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+MEDIA_URL = '/media/'
 
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR,'static')]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-LOGIN_REDIRECT_URL = 'home'  # Перенаправление на home после входа
+LOGIN_REDIRECT_URL = 'home'  
+CART_SESSION_ID = 'cart'
+

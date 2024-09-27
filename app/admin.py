@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'category', 'created_at', 'updated_at')  # что отображать в списке товаров
+    list_display = ('name', 'description','price', 'category', 'created_at', 'updated_at')  # что отображать в списке товаров
     search_fields = ('name', 'category__name')  # поля для поиска
     list_filter = ('category',)  # фильтры по категориям
 @admin.register(ProductCategory)

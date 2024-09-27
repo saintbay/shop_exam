@@ -18,14 +18,18 @@ from django.contrib import admin
 #     path('logout/', logout_view, name='logout')
 # ] 
 from django.urls import path
-from app.views import home_view, product_detail_view, cart_view, profile_view, search_view, signup_view, login_view, logout_view
+from app.views import catalog_view, product_detail_view, cart_view, profile_view,remove_from_cart, search_view, signup_view, login_view, logout_view,home,add_to_cart
 from django.conf import settings
 from django.conf.urls.static import static
 urlpatterns = [
+    path('cart/', cart_view, name='cart'),
+    path('add-to-cart/<int:product_id>/',add_to_cart, name='add_to_cart'),
+    path('cart/remove/<int:cart_id>/', remove_from_cart, name='remove_from_cart'),
     path('admin/', admin.site.urls),
-    path('', home_view, name='home'),
+    path('', home, name='home'),
     path('product/<int:product_id>/', product_detail_view, name='product_detail'),
     path('cart/', cart_view, name='cart'),
+    path('catalog/',catalog_view,name='catalog'),
     path('profile/', profile_view, name='profile'),
     path('search/', search_view, name='search'),
     path('signup/', signup_view, name='signup'),
